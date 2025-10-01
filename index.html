@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pill Animation</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #0f0f0f;
+    overflow: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // --- Floating Pill Animation ---
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  const renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById("canvas"),
+    alpha: true,
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const topMaterial = new THREE.MeshBasicMaterial({ color: 0x00e7ff, wireframe: true });
+  const bottomMaterial = new THREE.MeshBasicMaterial({ color: 0x00e7ff, wireframe: true });
+
+  const topHalfSphere = new THREE.SphereGeometry(2, 256, 256, 0, Math.PI * 2, 0, Math.PI / 2);
+  const bottomHalfSphere = new THREE.SphereGeometry(2, 64, 64, 0, Math.PI * 2, Math.PI / 2, Math.PI);
+  const topHalfCylinder = new THREE.CylinderGeometry(2, 2, 4, 256);
+  const bottomHalfCylinder = new THREE.CylinderGeometry(2, 2, 4, 64);
+
+  const topSphereMesh = new THREE.Mesh(topHalfSphere, topMaterial);
+  topSphereMesh.position.y = 4;
+  const bottomSphereMesh = new THREE.Mesh(bottomHalfSphere, bottomMaterial);
+  bottomSphereMesh.position.y = -4;
+  const topCylinderMesh = new THREE.Mesh(topHalfCylinder, topMaterial);
+  topCylinderMesh.position.y = 2;
+  const bottomCylinderMesh = new THREE.Mesh(bottomHalfCylinder, bottomMaterial);
+  bottomCylinderMesh.position.y = -2;
+
+  const pill = new THREE.Group();
+  pill.add(topSphereMesh, bottomSphereMesh, topCylinderMesh, bottomCylinderMesh);
+  scene.add(pill);
+
+  camera.position.z = 15;
+  let positionOffset = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    pill.rotation.x += 0.01;
+    pill.rotation.y += 0.01;
+    pill.rotation.z += 0.01;
+    positionOffset += 0.01;
+    pill.position.x = Math.sin(positionOffset) * 5;
+    pill.position.y = Math.cos(positionOffset) * 1.5;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+</body>
+</html>
