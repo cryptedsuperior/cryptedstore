@@ -1,167 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tier Store</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cryptedcpz Club</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
     body {
-      background-color: #f4f4f4;
-      color: #333;
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    header {
-      background: #222;
+      margin: 0;
+      font-family: Arial, sans-serif;
       color: #fff;
-      padding: 60px 0;
-      text-align: center;
+      background: url('https://i.gifer.com/7dDt.gif') no-repeat center center/cover;
+      background-size: cover;
     }
-
-    header h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
     }
-
-    header p {
-      font-size: 1.2rem;
-      opacity: 0.8;
-    }
-
-    .tiers {
-      padding: 40px 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      gap: 20px;
-    }
-
-    .tier-card {
-      flex: 1 1 250px;
-      background: white;
+    .modal-content {
+      background-color: #222;
+      margin: 15% auto;
       padding: 20px;
       border-radius: 10px;
+      max-width: 400px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
     }
-
-    .tier-card:hover {
-      transform: translateY(-5px);
+    .modal-content p {
+      margin-bottom: 20px;
     }
-
-    .tier-card h2 {
+    .input-code {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      width: 80%;
       margin-bottom: 10px;
     }
-
-    .tier-card p {
-      font-size: 0.95rem;
+    .btn-verify {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #ffcc00;
+      color: #000;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-verify:hover {
+      background: #ffdb4d;
+      transform: translateY(-2px);
+    }
+    .btn-tier, .btn-tier-free {
+      margin-top: 10px;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn-tier {
+      background: linear-gradient(45deg, #ffcc00, #ff6a00);
+      color: white;
+    }
+    .btn-tier:hover {
+      background: linear-gradient(45deg, #ffd633, #e55a00);
+      transform: translateY(-2px);
+    }
+    .btn-tier-free {
+      background: rgba(128,128,128,0.2);
+      color: white;
+    }
+    .btn-tier-free:hover {
+      background: rgba(128,128,128,0.4);
+      transform: translateY(-2px);
+    }
+    .container {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 34px 17px;
+      background: rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 5px;
+    }
+    h1 span.colored {
+      background: linear-gradient(45deg, #ffcc00, #ffb347);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+    p.subtitle {
+      text-align: center;
+      font-size: 1rem;
+      margin-top: 0;
+      margin-bottom: 34px;
+    }
+    .tiers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+    }
+    .tier {
+      background: rgba(255,255,255,0.1);
+      border-radius: 17px;
+      padding: 21px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+    .tier .label {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      padding: 4px 10px;
+      border-radius: 13px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #ffdb4d, #ff8533);
+    }
+    .label.recommended {
+      background: linear-gradient(45deg, #ffdb4d, #ff8533);
+    }
+    .label.bestseller {
+      background: linear-gradient(45deg, #ffdb4d, #ff8533);
+    }
+    .tier h2 {
+      margin: 17px 0 8px;
+      font-size: 1.4rem;
+    }
+    .tier p.desc {
+      font-size: 0.9rem;
+      margin: 8px 0;
+    }
+    .price {
+      font-size: 1.7rem;
+      margin: 13px 0;
+    }
+    .why-choose {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .why-choose h2 {
+      grid-column: 1/-1;
+      text-align: center;
       margin-bottom: 15px;
     }
-
-    .price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #222;
+    .why-box {
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 15px;
+      font-size: 0.95rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
     }
-
-    .btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background: #222;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-
-    .btn:hover {
-      background: #444;
-    }
-
-    /* Tier color accents */
-    .bronze {
-      border-top: 5px solid #cd7f32;
-    }
-    .silver {
-      border-top: 5px solid #c0c0c0;
-    }
-    .gold {
-      border-top: 5px solid #ffd700;
-    }
-    .platinum {
-      border-top: 5px solid #e5e4e2;
-    }
-
     footer {
       text-align: center;
-      padding: 20px 0;
-      background: #222;
-      color: #fff;
-      margin-top: 40px;
+      padding: 17px;
+      background: rgba(0,0,0,0.6);
+      margin-top: 17px;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Welcome to <span class="colored">Cryptedcpz Club</span></h1>
+    <p class="subtitle">Top-tier curated collections delivered via Torrent bundles. Fast, organized, and premium.</p>
 
-  <header>
-    <div class="container">
-      <h1>Welcome to Tier Store</h1>
-      <p>Choose your tier. Unlock the value.</p>
+    <div class="tiers">
+      <div class="tier">
+        <h2>Tier 1</h2>
+        <p class="desc">250GB Torrent</p>
+        <p class="price">$20</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
+      <div class="tier">
+        <h2>Tier 2</h2>
+        <p class="desc">500GB Torrent</p>
+        <p class="price">$40</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
+      <div class="tier">
+        <span class="label recommended">Recommended</span>
+        <h2>Tier 3</h2>
+        <p class="desc">1 TB Torrent</p>
+        <p class="price">$60</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
+      <div class="tier">
+        <h2>Tier 4</h2>
+        <p class="desc">2 TB Torrent</p>
+        <p class="price">$80</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
+      <div class="tier">
+        <span class="label bestseller">Best Seller</span>
+        <h2>Tier 5</h2>
+        <p class="desc">4 TB Torrent</p>
+        <p class="price">$100</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
+      <div class="tier">
+        <h2>Tier 6</h2>
+        <p class="desc">8TB Torrent</p>
+        <p class="price">$130</p>
+        <a href="https://t.me/superi0rcrypted" target="_blank"><button class="btn-tier">Buy</button></a>
+        <button class="btn-tier-free" onclick="openFreeModal()">Free Preview</button>
+      </div>
     </div>
-  </header>
 
-  <section class="tiers">
-    <div class="container">
-
-      <div class="tier-card bronze">
-        <h2>Bronze Tier</h2>
-        <p>Basic items for getting started.</p>
-        <span class="price">$9.99</span>
-        <a href="#" class="btn">Buy Now</a>
-      </div>
-
-      <div class="tier-card silver">
-        <h2>Silver Tier</h2>
-        <p>Upgraded gear and better value.</p>
-        <span class="price">$19.99</span>
-        <a href="#" class="btn">Buy Now</a>
-      </div>
-
-      <div class="tier-card gold">
-        <h2>Gold Tier</h2>
-        <p>Premium items for pros.</p>
-        <span class="price">$29.99</span>
-        <a href="#" class="btn">Buy Now</a>
-      </div>
-
-      <div class="tier-card platinum">
-        <h2>Platinum Tier</h2>
-        <p>Top-tier exclusives and perks.</p>
-        <span class="price">$49.99</span>
-        <a href="#" class="btn">Buy Now</a>
-      </div>
-
+    <div class="why-choose">
+      <h2>Why Choose Cryptedcpz?</h2>
+      <div class="why-box">✅ Trusted by 2,000+ customers</div>
+      <div class="why-box">🚀 Instant delivery via Telegram/Discord</div>
+      <div class="why-box">💯 99% satisfaction guarantee</div>
+      <div class="why-box">🔒 100% safe & secure</div>
+      <div class="why-box">🎯 Premium curated collections</div>
+      <div class="why-box">⚡ Fast downloads & organized content</div>
+      <div class="why-box">🔓 Free preview verification</div>
+      <div class="why-box">💌 24/7 Support & guidance</div>
+      <div class="why-box">📦 Large Mega/Torrent files available</div>
+      <div class="why-box">🎁 Special offers & free bonuses</div>
+      <div class="why-box">📊 Easy tracking of purchases</div>
+      <div class="why-box">🌐 Worldwide access anytime</div>
     </div>
-  </section>
+  </div>
+
+  <div id="freeModal" class="modal">
+    <div class="modal-content">
+      <p id="challengeText"></p>
+      <input type="text" id="verificationCode" class="input-code" placeholder="Enter answer" />
+      <button class="btn-verify" onclick="verifyCode()">Verify</button>
+      <p id="verifyMessage" style="margin-top:10px; color: #ffcc00;"></p>
+    </div>
+  </div>
 
   <footer>
-    <p>&copy; 2025 Tier Store. All rights reserved.</p>
+    <p>© Cryptedcpz • DM @superi0rcrypted on Telegram to purchase</p>
   </footer>
 
+  <script>
+    const freeModal = document.getElementById('freeModal');
+    const verifyMessage = document.getElementById('verifyMessage');
+    const challengeText = document.getElementById('challengeText');
+
+    let correctAnswer;
+
+    function generateChallenge(){
+      const num1 = Math.floor(Math.random()*9)+1;
+      const num2 = Math.floor(Math.random()*9)+1;
+      challengeText.textContent = `What is ${num1} + ${num2}?`;
+      correctAnswer = num1 + num2;
+    }
+
+    function openFreeModal(){
+      generateChallenge();
+      freeModal.style.display = 'block';
+    }
+
+    function verifyCode(){
+      const code = document.getElementById('verificationCode').value;
+      if(parseInt(code) === correctAnswer){
+        verifyMessage.style.color = "#28a745";
+        verifyMessage.textContent = "Verification successful! Redirecting...";
+        setTimeout(()=>{
+          window.open("https://link-target.net/1404843/izUquToOepOc", "_blank");
+          freeModal.style.display = 'none';
+        }, 1200);
+      } else {
+        verifyMessage.style.color = "#ff4d4d";
+        verifyMessage.textContent = "Invalid answer. Please try again.";
+      }
+    }
+
+    window.addEventListener('click', (event) => {
+      if (event.target === freeModal) {
+        freeModal.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
-
